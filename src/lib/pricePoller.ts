@@ -129,17 +129,20 @@ export async function pollAllCardPrices(): Promise<{ updated: number; alerts: nu
 
         if (triggered) {
           await prisma.alertHistory.create({
-            data: {
-              ruleId: rule.id,
-              message,
-              priceValue: currentPrice,
-            },
+            data: { ruleId: rule.id, message, priceValue: currentPrice },
           });
           pendingAlerts.push({
             cardName: card.name,
+            setName: card.setName,
+            cardNumber: card.cardNumber,
+            imageUrl: card.imageUrl,
+            cardId: card.id,
             message,
+            ruleType: rule.type as "ABOVE" | "BELOW" | "MOVE_PCT",
             tcgPrice: tcgMarket,
-            ebayPrice: ebay.avgPrice,
+            tcgLowPrice: tcgLow,
+            ebayAvgPrice: ebay.avgPrice,
+            ebayLastSold: ebay.lastSoldPrice,
             changePercent,
           });
         }
@@ -154,9 +157,16 @@ export async function pollAllCardPrices(): Promise<{ updated: number; alerts: nu
           if (Math.abs(pct) >= 10 && !card.alertRules.some((r: { type: string; source: string }) => r.type === "MOVE_PCT" && r.source === "TCG")) {
             pendingAlerts.push({
               cardName: card.name,
+              setName: card.setName,
+              cardNumber: card.cardNumber,
+              imageUrl: card.imageUrl,
+              cardId: card.id,
               message: `TCGPlayer price moved ${pct > 0 ? "+" : ""}${pct.toFixed(1)}%`,
+              ruleType: "AUTO",
               tcgPrice: tcgMarket,
-              ebayPrice: ebay.avgPrice,
+              tcgLowPrice: tcgLow,
+              ebayAvgPrice: ebay.avgPrice,
+              ebayLastSold: ebay.lastSoldPrice,
               changePercent: pct,
             });
           }
@@ -166,9 +176,16 @@ export async function pollAllCardPrices(): Promise<{ updated: number; alerts: nu
           if (Math.abs(pct) >= 10 && !card.alertRules.some((r: { type: string; source: string }) => r.type === "MOVE_PCT" && r.source === "EBAY")) {
             pendingAlerts.push({
               cardName: card.name,
+              setName: card.setName,
+              cardNumber: card.cardNumber,
+              imageUrl: card.imageUrl,
+              cardId: card.id,
               message: `eBay avg sold price moved ${pct > 0 ? "+" : ""}${pct.toFixed(1)}%`,
+              ruleType: "AUTO",
               tcgPrice: tcgMarket,
-              ebayPrice: ebay.avgPrice,
+              tcgLowPrice: tcgLow,
+              ebayAvgPrice: ebay.avgPrice,
+              ebayLastSold: ebay.lastSoldPrice,
               changePercent: pct,
             });
           }
