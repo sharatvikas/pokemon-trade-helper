@@ -67,14 +67,14 @@ export function DashboardClient({ cards, lastPoll }: { cards: WantCard[]; lastPo
   });
 
   const snaps = cards.map((c) => c.priceSnapshots[0]).filter(Boolean);
-  const avgTcg = snaps.filter((s) => s.tcgMarketPrice).length
-    ? snaps.reduce((sum, s) => sum + (s.tcgMarketPrice ?? 0), 0) / snaps.filter((s) => s.tcgMarketPrice).length
+  const totalTcg = snaps.some((s) => s.tcgMarketPrice)
+    ? snaps.reduce((sum, s) => sum + (s.tcgMarketPrice ?? 0), 0)
     : null;
 
   const stats = [
     { label: "Cards Tracked", value: cards.length, icon: LayoutList, delay: "" },
     { label: "Active Alerts", value: cards.reduce((n, c) => n + c.alertRules.length, 0), icon: Bell, delay: "animate-fade-up-1" },
-    { label: "Avg TCGPlayer", value: avgTcg != null ? `$${avgTcg.toFixed(2)}` : "—", icon: Sparkles, delay: "animate-fade-up-2" },
+    { label: "List Total Value", value: totalTcg != null ? `$${totalTcg.toFixed(2)}` : "—", icon: Sparkles, delay: "animate-fade-up-2" },
     { label: "Big Movers (>10%)", value: bigMoveCards.length, icon: TrendingUp, delay: "animate-fade-up-3" },
   ];
 

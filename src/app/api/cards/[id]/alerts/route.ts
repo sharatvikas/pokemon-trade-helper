@@ -26,6 +26,18 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   return NextResponse.json(rule, { status: 201 });
 }
 
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id: cardId } = await params;
+  const { searchParams } = new URL(req.url);
+  const ruleId = searchParams.get("ruleId");
+  if (!ruleId) return NextResponse.json({ error: "ruleId required" }, { status: 400 });
+  const body = await req.json();
+  const parsed = AlertRuleSchema.safeParse(body);
+  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+  const rule = await prisma.alertRule.update({ where: { id: ruleId, cardId }, data: parsed.data });
+  return NextResponse.json(rule);
+}
+
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id: cardId } = await params;
   const { searchParams } = new URL(req.url);
