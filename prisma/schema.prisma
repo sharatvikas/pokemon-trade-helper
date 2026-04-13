@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model WantCard {
+  id          String   @id @default(cuid())
+  name        String
+  setName     String?
+  setCode     String?
+  cardNumber  String?
+  tcgPlayerId String?
+  imageUrl    String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  priceSnapshots PriceSnapshot[]
+  alertRules     AlertRule[]
+}
+
+model PriceSnapshot {
+  id               String   @id @default(cuid())
+  cardId           String
+  tcgMarketPrice   Float?
+  tcgLowPrice      Float?
+  ebayAvgSold      Float?
+  ebayLastSold     Float?
+  ebayListingCount Int?
+  fetchedAt        DateTime @default(now())
+
+  card WantCard @relation(fields: [cardId], references: [id], onDelete: Cascade)
+
+  @@index([cardId, fetchedAt])
+}
+
+model AlertRule {
+  id        String   @id @default(cuid())
+  cardId    String
+  type      String   // "ABOVE" | "BELOW" | "MOVE_PCT"
+  source    String   // "TCG" | "EBAY" | "BOTH"
+  threshold Float
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  card    WantCard       @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  history AlertHistory[]
+}
+
+model AlertHistory {
+  id          String   @id @default(cuid())
+  ruleId      String
+  triggeredAt DateTime @default(now())
+  message     String
+  priceValue  Float
+
+  rule AlertRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@index([ruleId, triggeredAt])
+}
