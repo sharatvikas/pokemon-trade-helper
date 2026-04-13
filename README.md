@@ -20,22 +20,26 @@ Prices are pulled from **pokemontcg.io** (TCGPlayer market data) with a **Scryde
 
 ## Screenshots
 
-> Drop your own screenshots into `docs/screenshots/` and update the paths below.
-
 ### Dashboard
-![Dashboard overview with stat cards and want list table](docs/screenshots/dashboard.png)
+![Dashboard overview with stat cards and want list table](public/screenshots/HomePage.png)
 
 ### Want List
-![Want list grid with card images and live prices](docs/screenshots/want-list.png)
+![Want list grid with card images and live prices](public/screenshots/Want-List.png)
 
 ### Add Card — Search
-![Add card dialog showing name search with live prices in results](docs/screenshots/add-card-search.png)
+![Add card dialog showing name search with live prices in results](public/screenshots/Search.png)
 
 ### Add Card — Paste Link
-![Add card dialog with URL lookup from TCGPlayer](docs/screenshots/add-card-url.png)
+![Add card dialog with URL lookup from TCGPlayer](public/screenshots/Link.png)
 
 ### Card Detail
-![Card detail page with price history chart and alert rules](docs/screenshots/card-detail.png)
+![Card detail page with price history chart and alert rules](public/screenshots/CardPage.png)
+
+### Alerts
+![Alerts page with active rules and recent trigger history](public/screenshots/Alerts.png)
+
+### Create Alert Rules
+![Alert rule builder with condition, source, and threshold controls](public/screenshots/Create-AlertRules.png)
 
 ---
 
@@ -191,10 +195,10 @@ Prices load automatically the moment you add a card — no need to wait for the 
 The **Dashboard** at `/` shows:
 - **Cards Tracked** — total cards on your want list
 - **Active Alerts** — total alert rules across all cards
-- **Avg TCGPlayer** — mean market price across your list
-- **Big Movers** — cards that moved >10% since last poll
+- **List Total Value** — combined TCGPlayer market price across your list
+- **Buying Opportunities** — cards whose price dropped since the last poll
 
-Cards with big price moves get an amber left-border highlight in the table. Click any card name to open its detail page.
+Cards with price drops get a highlight in the table. Click any card name to open its detail page.
 
 ### Card Detail Page
 
@@ -256,7 +260,7 @@ pokemon-trade-helper/
 ├── prisma/
 │   ├── schema.prisma             # Database schema
 │   └── migrations/               # SQL migrations
-├── docs/screenshots/             # Add your screenshots here
+├── public/screenshots/           # App screenshots
 ├── cron-worker.mjs               # Standalone 6-hour price poll worker
 ├── setup.mjs                     # Interactive setup wizard
 └── prisma.config.ts              # Prisma 7 driver adapter config
