@@ -60,10 +60,10 @@ export function DashboardClient({ cards, lastPoll }: { cards: WantCard[]; lastPo
     }
   }
 
-  const bigMoveCards = cards.filter((c) => {
+  const buyingOpportunities = cards.filter((c) => {
     const [cur, prev] = c.priceSnapshots;
     const pct = priceDelta(cur?.tcgMarketPrice ?? null, prev?.tcgMarketPrice ?? null);
-    return pct !== null && Math.abs(pct) >= 10;
+    return pct !== null && pct < 0;
   });
 
   const snaps = cards.map((c) => c.priceSnapshots[0]).filter(Boolean);
@@ -75,7 +75,7 @@ export function DashboardClient({ cards, lastPoll }: { cards: WantCard[]; lastPo
     { label: "Cards Tracked", value: cards.length, icon: LayoutList, delay: "" },
     { label: "Active Alerts", value: cards.reduce((n, c) => n + c.alertRules.length, 0), icon: Bell, delay: "animate-fade-up-1" },
     { label: "List Total Value", value: totalTcg != null ? `$${totalTcg.toFixed(2)}` : "—", icon: Sparkles, delay: "animate-fade-up-2" },
-    { label: "Big Movers (>10%)", value: bigMoveCards.length, icon: TrendingUp, delay: "animate-fade-up-3" },
+    { label: "Buying Opportunities", value: buyingOpportunities.length, icon: TrendingDown, delay: "animate-fade-up-3" },
   ];
 
   return (
@@ -176,7 +176,7 @@ export function DashboardClient({ cards, lastPoll }: { cards: WantCard[]; lastPo
                   const [cur, prev] = card.priceSnapshots;
                   const tcgPct = priceDelta(cur?.tcgMarketPrice ?? null, prev?.tcgMarketPrice ?? null);
                   const ebayPct = priceDelta(cur?.ebayAvgSold ?? null, prev?.ebayAvgSold ?? null);
-                  const bigMove = (tcgPct !== null && Math.abs(tcgPct) >= 10) || (ebayPct !== null && Math.abs(ebayPct) >= 10);
+                  const bigMove = (tcgPct !== null && tcgPct < 0) || (ebayPct !== null && ebayPct < 0);
                   return (
                     <tr
                       key={card.id}
