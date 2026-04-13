@@ -24,7 +24,7 @@ export function Navbar() {
             className="font-semibold text-[15px] tracking-tight text-[#1d1d1f]"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Poke Trade
+            Pokemon Trader
           </span>
         </Link>
 

@@ -43,7 +43,7 @@ export async function sendAlertEmail(alerts: AlertEmailPayload[]) {
   const html = `
     <div style="font-family:sans-serif;max-width:700px;margin:0 auto">
       <h2 style="color:#1e293b;border-bottom:2px solid #f59e0b;padding-bottom:8px">
-        🃏 Poke Trade Helper — Price Alert
+        🃏 Pokemon Trader — Price Alert
       </h2>
       <p style="color:#64748b">${new Date().toLocaleString()}</p>
       <table style="width:100%;border-collapse:collapse;margin-top:16px">
@@ -59,14 +59,14 @@ export async function sendAlertEmail(alerts: AlertEmailPayload[]) {
         <tbody>${rows}</tbody>
       </table>
       <p style="margin-top:24px;color:#94a3b8;font-size:12px">
-        Sent by Poke Trade Helper running on your local machine.
+        Sent by Pokemon Trader running on your local machine.
       </p>
     </div>`;
 
   await transporter.sendMail({
-    from: `"Poke Trade Helper" <${from}>`,
+    from: `"Pokemon Trader" <${from}>`,
     to,
-    subject: `[Poke Trade] ${alerts.length} price alert${alerts.length > 1 ? "s" : ""}`,
+    subject: `[Pokemon Trader] ${alerts.length} price alert${alerts.length > 1 ? "s" : ""}`,
     html,
   });
 }

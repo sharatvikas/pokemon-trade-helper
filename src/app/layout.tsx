@@ -17,7 +17,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Poke Trade Helper",
+  title: "Pokemon Trader",
   description: "Monitor Pokemon TCG card prices from TCGPlayer and eBay",
 };
 
