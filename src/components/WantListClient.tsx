@@ -84,10 +84,13 @@ function SetCombobox({
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Sync label when selectedId clears from outside
-  useEffect(() => {
+  // Sync label when selectedId clears from outside. Adjusted during render rather than
+  // in an effect, so React doesn't render once with the stale label first.
+  const [prevSelectedId, setPrevSelectedId] = useState(selectedId);
+  if (selectedId !== prevSelectedId) {
+    setPrevSelectedId(selectedId);
     if (!selectedId) setQuery("");
-  }, [selectedId]);
+  }
 
   useEffect(() => {
     function onMouseDown(e: MouseEvent) {
